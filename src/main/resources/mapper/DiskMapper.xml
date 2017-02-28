@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kaishengit.mapper.DiskMapper">
+    <insert id="saveDisk">
+        insert into t_disk(sourceName,name,fid,size,createUser,type)
+        VALUES (#{sourceName},#{name},#{fid},#{size},#{createUser},#{type})
+    </insert>
+    <delete id="delDisk">
+        delete from t_disk where id=#{id}
+    </delete>
+    <delete id="batchDel">
+        delete from t_disk WHERE id in(
+        <foreach collection="list" item="id" separator=",">
+            #{id}
+        </foreach>
+        )
+    </delete>
+
+    <select id="findByPath" resultType="com.kaishengit.pojo.Disk">
+        select*from t_disk where fid=#{path}
+    </select>
+    <select id="findById" resultType="com.kaishengit.pojo.Disk">
+        select*from t_disk where id=#{id}
+    </select>
+    <select id="findAll" resultType="com.kaishengit.pojo.Disk">
+        select*from t_disk
+    </select>
+</mapper>

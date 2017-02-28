@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.kaishengit.mapper.DeviceRentMapper">
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        insert into t_device_rent(companyName,linkMan,cardNum,tel,
+        address,fax,rentDate,backDate,totalDay,totalPrice,preCost,
+        lastCost,createUser,serialNumber)values(#{companyName},#{linkMan},
+        #{cardNum},#{tel},#{address},#{fax},#{rentDate},#{backDate},#{totalDay},
+        #{totalPrice},#{preCost},#{lastCost},#{createUser},#{serialNumber})
+    </insert>
+    <update id="updateCost">
+        update t_device_rent SET totalPrice=#{total},preCost=#{preCost},lastCost=#{lastCost} where id=#{id}
+    </update>
+    <update id="updateState">
+        update t_device_rent set state=#{state} where id=#{id}
+    </update>
+    <select id="findDeviceRentBySerialNum" resultType="com.kaishengit.pojo.DeviceRent">
+        select*from t_device_rent where serialNumber=#{serialNumber}
+    </select>
+    <select id="findById" resultType="com.kaishengit.pojo.DeviceRent">
+        select*from t_device_rent where id=#{id}
+    </select>
+    <select id="findByParam" resultType="com.kaishengit.pojo.DeviceRent">
+        select*from t_device_rent order by id DESC
+        limit ${start},${length}
+    </select>
+    <select id="count" resultType="java.lang.Long">
+        select count(*) from t_device_rent
+    </select>
+</mapper>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.kaishengit.mapper.UserMapper">
+    <insert id="save" useGeneratedKeys="true" keyProperty="id">
+        insert into t_user(username,password,mobile) values(#{username},#{password},#{mobile})
+    </insert>
+    <update id="edit">
+        update t_user set username=#{username}
+        <if test="password!=null and password !=''">
+            ,password=#{password}
+        </if>
+        where id=#{id}
+    </update>
+    <update id="update">
+        update t_user
+        <set>
+            username=#{username},
+            <if test="password !=null and password !=''">
+              password=#{password}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <delete id="del">
+        delete from t_user where id=#{id}
+    </delete>
+
+    <select id="findAll" resultMap="UserMap">
+        select tu.*,tr.id roleid,tr.rolename,tr.viewname from t_user tu
+        left JOIN t_user_role tur on tu.id=tur.userid
+        left JOIN t_role tr on tr.id=tur.roleid
+    </select>
+    <resultMap id="UserMap" type="User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <collection property="roleList" ofType="Role">
+            <id column="roleid" property="id"/>
+            <result column="rolename" property="rolename"/>
+            <result column="viewname" property="viewname"/>
+        </collection>
+    </resultMap>
+
+    <select id="findById" resultMap="UserMap1">
+        select tu.*,tr.id roleid,tr.rolename,tr.viewname from t_user tu
+        left join t_user_role tur on tu.id=tur.userid
+        left join t_role tr on tr.id = tur.roleid
+        where tu.id=#{id}
+    </select>
+    <select id="findByUsername" resultType="com.kaishengit.pojo.User">
+        select*from t_user where username=#{username}
+    </select>
+    <resultMap id="UserMap1" type="User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <collection property="roleList" ofType="Role">
+            <id column="roleid" property="id"/>
+            <result column="rolename" property="rolename"/>
+            <result property="viewname" column="viewname"/>
+        </collection>
+
+
+    </resultMap>
+
+
+</mapper>
